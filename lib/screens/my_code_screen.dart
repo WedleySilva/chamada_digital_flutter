@@ -17,10 +17,7 @@ class _MyCodeScreenState extends State<MyCodeScreen> {
   @override
   void initState() {
     super.initState();
-    // Inicializa a hora e data
     _updateTime();
-    
-    // Atualiza a hora a cada segundo
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _updateTime();
     });
@@ -28,7 +25,6 @@ class _MyCodeScreenState extends State<MyCodeScreen> {
 
   @override
   void dispose() {
-    // Cancela o timer ao sair da tela para economizar recursos
     _timer.cancel();
     super.dispose();
   }
@@ -36,7 +32,6 @@ class _MyCodeScreenState extends State<MyCodeScreen> {
   void _updateTime() {
     final now = DateTime.now();
     setState(() {
-      // Formata a hora e data para o padrão pt_BR
       _currentTime = DateFormat('HH:mm:ss', 'pt_BR').format(now);
       _currentDate = DateFormat('dd/MM/yyyy', 'pt_BR').format(now);
     });
@@ -60,7 +55,6 @@ class _MyCodeScreenState extends State<MyCodeScreen> {
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
-              // O QR Code é simulado, mas a data e hora são reais
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -93,7 +87,6 @@ class _MyCodeScreenState extends State<MyCodeScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Simulação do QR Code
                     const Icon(
                       Icons.qr_code_2_rounded,
                       size: 200,
