@@ -6,7 +6,6 @@ import '../widgets/round_list_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -79,3 +78,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+// Implementar histórico de presenças futuramente e a função de gerar relatório. Documento deve analizado e corrigido com as devidas funções do App.
