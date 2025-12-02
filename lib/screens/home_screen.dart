@@ -1,4 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:csv/csv.dart';
+
 import '../models/attendance_round.dart';
 import '../screens/my_code_screen.dart';
 import '../screens/validation_flow_screen.dart';
@@ -44,6 +48,30 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _generateCsv() async {
+    final rows = [
+      ["Matéria", "Data", "Horário"],
+      ["BANCO DE DADOS", "2025-11-20", "19:05"],
+      ["PROBABILIDADE E ESTATÍSTICA", "2025-11-21", "19:10"],
+      ["PROGRAMAÇÃO SERVER-SIDE", "2025-11-22", "20:02"],
+      ["SOFT SKILLS - EMPREENDEDORISMO, CRIATIVIDADE E INOVAÇÃO", "2025-11-23", "18:59"],
+      ["TESTE DE SOFTWARE", "2025-11-24", "19:15"],
+      ["PROJETO DE APRENDIZAGEM COLABORATIVA EXTENSIONISTA III - PAC ESOFT", "2025-11-25", "20:22"],
+    ];
+
+    final csv = const ListToCsvConverter().convert(rows);
+
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File("${directory.path}/historico_chamadas.csv");
+    await file.writeAsString(csv);
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("CSV gerado como historico_chamadas.csv")),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,17 +81,108 @@ class _HomeScreenState extends State<HomeScreen> {
         foregroundColor: Colors.black,
         elevation: 1,
       ),
-      body: ListView.separated(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
-        itemCount: _rounds.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final round = _rounds[index];
-          return RoundListItem(
-            round: round,
-            onTap: () => _startValidation(round),
-          );
-        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _rounds.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final round = _rounds[index];
+                return RoundListItem(
+                  round: round,
+                  onTap: () => _startValidation(round),
+                );
+              },
+            ),
+
+            const SizedBox(height: 30),
+            const Divider(),
+            const SizedBox(height: 10),
+
+            /// HISTÓRICO SIMPLES (SEM ARRAY)
+            const Text(
+              "Histórico de Presenças",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+
+            const Card(
+              elevation: 2,
+              child: ListTile(
+                title: Text("BANCO DE DADOS"),
+                subtitle: Text("Registrado em: 20/11/2025 às 19:05"),
+                trailing: Icon(Icons.check_circle, color: Colors.green),
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            const Card(
+              elevation: 2,
+              child: ListTile(
+                title: Text("PROBABILIDADE E ESTATÍSTICA"),
+                subtitle: Text("Registrado em: 21/11/2025 às 19:10"),
+                trailing: Icon(Icons.check_circle, color: Colors.green),
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            const Card(
+              elevation: 2,
+              child: ListTile(
+                title: Text("PROGRAMAÇÃO SERVER-SIDE"),
+                subtitle: Text("Registrado em: 22/11/2025 às 20:02"),
+                trailing: Icon(Icons.check_circle, color: Colors.green),
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            const Card(
+              elevation: 2,
+              child: ListTile(
+                title: Text("SOFT SKILLS - EMPREENDEDORISMO, CRIATIVIDADE E INOVAÇÃO"),
+                subtitle: Text("Registrado em: 23/11/2025 às 18:59"),
+                trailing: Icon(Icons.check_circle, color: Colors.green),
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            const Card(
+              elevation: 2,
+              child: ListTile(
+                title: Text("TESTE DE SOFTWARE"),
+                subtitle: Text("Registrado em: 24/11/2025 às 19:15"),
+                trailing: Icon(Icons.check_circle, color: Colors.green),
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            const Card(
+              elevation: 2,
+              child: ListTile(
+                title: Text("PROJETO DE APRENDIZAGEM COLABORATIVA EXTENSIONISTA III - PAC ESOFT"),
+                subtitle: Text("Registrado em: 25/11/2025 às 20:22"),
+                trailing: Icon(Icons.check_circle, color: Colors.green),
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: _generateCsv,
+                icon: const Icon(Icons.file_download),
+                label: const Text("Baixar Relatório CSV"),
+              ),
+            ),
+
+            const SizedBox(height: 40),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -78,5 +197,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-// Implementar histórico de presenças futuramente e a função de gerar relatório. Documento deve analizado e corrigido com as devidas funções do App.

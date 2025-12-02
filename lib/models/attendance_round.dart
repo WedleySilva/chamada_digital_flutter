@@ -15,7 +15,6 @@ class AttendanceRound {
     this.recordedAt,
   });
 
-  // Cor do card baseada no status
   Color get statusColor {
     switch (status) {
       case AttendanceStatus.presente:
@@ -28,7 +27,6 @@ class AttendanceRound {
     }
   }
 
-  // Texto do status
   String get statusText {
     switch (status) {
       case AttendanceStatus.presente:
